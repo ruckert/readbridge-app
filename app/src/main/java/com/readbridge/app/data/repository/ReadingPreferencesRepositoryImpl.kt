@@ -43,6 +43,8 @@ class ReadingPreferencesRepositoryImpl @Inject constructor(
             prefs[KEY_CONTENT_WIDTH] = preferences.contentWidth.name
             prefs[KEY_TEXT_ALIGN] = preferences.textAlign.name
             prefs[KEY_HYPHENATION] = preferences.hyphenation
+            prefs[KEY_CUSTOM_BG] = preferences.customBackgroundHex
+            prefs[KEY_CUSTOM_TEXT] = preferences.customTextHex
         }
     }
 
@@ -58,6 +60,8 @@ class ReadingPreferencesRepositoryImpl @Inject constructor(
             contentWidth = enumOrDefault(this[KEY_CONTENT_WIDTH], defaults.contentWidth),
             textAlign = enumOrDefault(this[KEY_TEXT_ALIGN], defaults.textAlign),
             hyphenation = this[KEY_HYPHENATION] ?: defaults.hyphenation,
+            customBackgroundHex = this[KEY_CUSTOM_BG] ?: defaults.customBackgroundHex,
+            customTextHex = this[KEY_CUSTOM_TEXT] ?: defaults.customTextHex,
         )
     }
 
@@ -74,5 +78,7 @@ class ReadingPreferencesRepositoryImpl @Inject constructor(
         val KEY_CONTENT_WIDTH = stringPreferencesKey("content_width")
         val KEY_TEXT_ALIGN = stringPreferencesKey("text_align")
         val KEY_HYPHENATION = booleanPreferencesKey("hyphenation")
+        val KEY_CUSTOM_BG = stringPreferencesKey("custom_bg")
+        val KEY_CUSTOM_TEXT = stringPreferencesKey("custom_text")
     }
 }

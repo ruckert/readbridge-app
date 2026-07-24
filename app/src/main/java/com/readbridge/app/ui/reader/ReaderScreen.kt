@@ -12,8 +12,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarBorder
+import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.Unarchive
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -58,11 +60,16 @@ fun ReaderScreen(
     val message by viewModel.message.collectAsStateWithLifecycle()
 
     val systemDark = isSystemInDarkTheme()
-    val palette = remember(prefs.theme, systemDark) { resolveReadingPalette(prefs.theme, systemDark) }
+    val palette = remember(prefs, systemDark) { resolveReadingPalette(prefs, systemDark) }
     val containerColor = Color(palette.background.toColorInt())
     val contentColor = Color(palette.text.toColorInt())
 
     val context = LocalContext.current
+    val tts = rememberArticleTts()
+    val isSpeaking by tts.isSpeaking
+    val speechText = remember(article?.id) {
+        article?.let { htmlToSpeechText(listOfNotNull(it.title, it.contentHtml).joinToString(". ")) }.orEmpty()
+    }
     val snackbarHostState = remember { SnackbarHostState() }
     val sheetState = rememberModalBottomSheetState()
     var showControls by remember { mutableStateOf(false) }
@@ -89,6 +96,15 @@ fun ReaderScreen(
                 },
                 actions = {
                     val current = article
+                    IconButton(
+                        onClick = { if (speechText.isNotBlank()) tts.toggle(speechText) },
+                        enabled = speechText.isNotBlank(),
+                    ) {
+                        Icon(
+                            imageVector = if (isSpeaking) Icons.Filled.Stop else Icons.Filled.PlayArrow,
+                            contentDescription = if (isSpeaking) "Parar leitura" else "Ouvir artigo",
+                        )
+                    }
                     IconButton(onClick = viewModel::toggleStar) {
                         Icon(
                             imageVector = if (current?.isStarred == true) Icons.Filled.Star else Icons.Filled.StarBorder,

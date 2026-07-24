@@ -54,6 +54,14 @@ Login funcional contra uma instância Wallabag (self-hosted ou wallabag.it):
 - **Adicionar artigo** por URL (FAB + diálogo) e **Share Target**: compartilhar um
   link de qualquer app salva no Wallabag (`ShareReceiverActivity`).
 
+**Fase 5 (parte 1) — Extras de leitura** ✅
+- **TTS**: ouvir o artigo (play/stop na barra do leitor); HTML → texto, em pedaços,
+  com o motor de voz encerrado ao sair da tela.
+- **Tema personalizado**: cores de fundo/texto próprias (hex) com **validação de
+  contraste WCAG AA** ao vivo; cores derivadas (link/bloco/borda) calculadas.
+- Ainda na Fase 5 (futuro): highlights/anotações, export epub/pdf, empacotar as
+  fontes do leitor, widget e atalhos.
+
 ## Stack
 
 Kotlin · Jetpack Compose · Material 3 · Hilt · Navigation Compose ·

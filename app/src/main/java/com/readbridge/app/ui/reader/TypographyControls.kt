@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -55,6 +56,10 @@ fun TypographyControls(
                 label = ::themeLabel,
                 onSelect = { onChange(prefs.copy(theme = it)) },
             )
+        }
+
+        if (prefs.theme == ReadingTheme.Custom) {
+            CustomThemeSection(prefs = prefs, onChange = onChange)
         }
 
         Section("Fonte") {
@@ -137,6 +142,51 @@ fun TypographyControls(
 }
 
 @Composable
+private fun CustomThemeSection(
+    prefs: ReadingPreferences,
+    onChange: (ReadingPreferences) -> Unit,
+) {
+    val ratio = ColorUtils.contrastRatio(
+        ColorUtils.sanitize(prefs.customBackgroundHex, ReadingPreferences.DEFAULT_CUSTOM_BACKGROUND),
+        ColorUtils.sanitize(prefs.customTextHex, ReadingPreferences.DEFAULT_CUSTOM_TEXT),
+    )
+    val meetsAa = ratio >= 4.5
+    Section("Cores personalizadas") {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            OutlinedTextField(
+                value = prefs.customBackgroundHex,
+                onValueChange = { onChange(prefs.copy(customBackgroundHex = it)) },
+                label = { Text("Fundo") },
+                placeholder = { Text("#FFFFFF") },
+                singleLine = true,
+                isError = !ColorUtils.isValid(prefs.customBackgroundHex),
+                modifier = Modifier.weight(1f),
+            )
+            OutlinedTextField(
+                value = prefs.customTextHex,
+                onValueChange = { onChange(prefs.copy(customTextHex = it)) },
+                label = { Text("Texto") },
+                placeholder = { Text("#1B1B1B") },
+                singleLine = true,
+                isError = !ColorUtils.isValid(prefs.customTextHex),
+                modifier = Modifier.weight(1f),
+            )
+        }
+        Text(
+            text = "Contraste %.1f:1 — %s".format(
+                ratio,
+                if (meetsAa) "✓ WCAG AA" else "✗ baixo (mín. 4.5:1)",
+            ),
+            style = MaterialTheme.typography.bodySmall,
+            color = if (meetsAa) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
+        )
+    }
+}
+
+@Composable
 private fun Section(title: String, content: @Composable () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(
@@ -196,6 +246,7 @@ private fun themeLabel(theme: ReadingTheme): String = when (theme) {
     ReadingTheme.Gray -> "Cinza"
     ReadingTheme.Oled -> "OLED"
     ReadingTheme.System -> "Sistema"
+    ReadingTheme.Custom -> "Personalizado"
 }
 
 private fun fontFamilyLabel(family: ReaderFontFamily): String = when (family) {

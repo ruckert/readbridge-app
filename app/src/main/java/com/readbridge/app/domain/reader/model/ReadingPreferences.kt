@@ -14,6 +14,8 @@ data class ReadingPreferences(
     val contentWidth: ContentWidth = ContentWidth.Medium,
     val textAlign: ReaderTextAlign = ReaderTextAlign.Start,
     val hyphenation: Boolean = false,
+    val customBackgroundHex: String = DEFAULT_CUSTOM_BACKGROUND,
+    val customTextHex: String = DEFAULT_CUSTOM_TEXT,
 ) {
     companion object {
         const val DEFAULT_FONT_SIZE = 18
@@ -27,10 +29,13 @@ data class ReadingPreferences(
         const val DEFAULT_LETTER_SPACING = 0f
         const val MIN_LETTER_SPACING = -0.02f
         const val MAX_LETTER_SPACING = 0.08f
+
+        const val DEFAULT_CUSTOM_BACKGROUND = "#FFFFFF"
+        const val DEFAULT_CUSTOM_TEXT = "#1B1B1B"
     }
 }
 
-enum class ReadingTheme { Light, Sepia, Gray, Oled, System }
+enum class ReadingTheme { Light, Sepia, Gray, Oled, System, Custom }
 
 enum class ReaderFontFamily { Serif, SansSerif, Slab, Monospace, Dyslexic }
 

@@ -11,7 +11,8 @@ import org.junit.Test
 
 class ReaderHtmlTest {
 
-    private val palette = resolveReadingPalette(ReadingTheme.Sepia, systemDark = false)
+    private val palette =
+        resolveReadingPalette(ReadingPreferences(theme = ReadingTheme.Sepia), systemDark = false)
 
     @Test
     fun `css variables reflect preferences`() {
