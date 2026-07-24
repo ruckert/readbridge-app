@@ -1,7 +1,9 @@
 package com.readbridge.app.data.remote.api
 
+import com.readbridge.app.data.remote.dto.EntriesResponseDto
 import com.readbridge.app.data.remote.dto.WallabagInfoDto
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 /**
  * Authenticated Wallabag REST API. Requests are routed to the configured server by
@@ -15,4 +17,20 @@ interface WallabagApi {
 
     @GET("api/info.json")
     suspend fun getInfo(): WallabagInfoDto
+
+    /**
+     * List entries. All filters are optional; [archive]/[starred] are 0/1 or null (both).
+     * [since] is a UNIX timestamp for incremental sync; [detail]=`full` includes HTML content.
+     */
+    @GET("api/entries.json")
+    suspend fun getEntries(
+        @Query("archive") archive: Int? = null,
+        @Query("starred") starred: Int? = null,
+        @Query("sort") sort: String = "updated",
+        @Query("order") order: String = "desc",
+        @Query("page") page: Int = 1,
+        @Query("perPage") perPage: Int = 30,
+        @Query("since") since: Long? = null,
+        @Query("detail") detail: String = "full",
+    ): EntriesResponseDto
 }

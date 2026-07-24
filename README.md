@@ -22,13 +22,23 @@ Login funcional contra uma instância Wallabag (self-hosted ou wallabag.it):
 - Tokens em **`EncryptedSharedPreferences`**; estado de sessão reativo (`StateFlow`)
   dirige a navegação (login ⇄ app).
 - Tela de login (URL, client id/secret, usuário, senha) com validação e mensagens
-  de erro; tela pós-login com logout.
+  de erro.
+
+**Fase 2 — Lista de artigos + cache offline** ✅
+- **Offline-first**: a lista vem sempre do **Room**; a rede só atualiza o cache.
+- **Sincronização** com o Wallabag: full na primeira vez, **incremental via `since`**
+  nas seguintes (cursor persistido em DataStore).
+- **Paging 3** sobre o Room; **pull-to-refresh** (Material 3).
+- Filtros **Todos / Não lidos / Favoritos / Arquivados**.
+- Card com imagem (**Coil**), título, domínio, tempo de leitura e indicador de favorito.
+- HTML do artigo é cacheado para o leitor offline (Fase 3); logout no menu.
 
 ## Stack
 
 Kotlin · Jetpack Compose · Material 3 · Hilt · Navigation Compose ·
-**Retrofit + OkHttp + kotlinx.serialization** · **security-crypto** · DataStore ·
-Coroutines/Flow. (Room e WorkManager entram nas fases seguintes.)
+**Retrofit + OkHttp + kotlinx.serialization** · **security-crypto** ·
+**Room + Paging 3** · **Coil** · DataStore · Coroutines/Flow.
+(WorkManager entra nas fases seguintes.)
 
 ## Requisitos
 
@@ -65,5 +75,5 @@ app/src/main/java/com/readbridge/app/
 
 ## Roadmap
 
-Ver [`docs/PLAN.md`](docs/PLAN.md) §7. Próxima fase: **Fase 2 — Lista de artigos +
-cache offline (Room + Paging 3, sync incremental)**.
+Ver [`docs/PLAN.md`](docs/PLAN.md) §7. Próxima fase: **Fase 3 — Leitor** (WebView com
+template HTML + CSS variables, temas de leitura e `ReadingPreferences` — ver §6-A).

@@ -91,7 +91,16 @@ dependencies {
     // Secure token storage (OAuth2 tokens — Phase 1)
     implementation(libs.androidx.security.crypto)
 
-    // DataStore (reading preferences persistence — see §6-A.4)
+    // Offline cache + paging (article list — Phase 2)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.coil.compose)
+
+    // DataStore (sync cursor + reading preferences persistence — see §6-A.4)
     implementation(libs.androidx.datastore.preferences)
 
     // Debug tooling
