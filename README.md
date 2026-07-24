@@ -12,13 +12,23 @@ customizável (tipografia, temas, persistência de preferências).
 
 **Fase 0 — Scaffold** ✅
 Projeto Android nativo (Kotlin + Jetpack Compose + Material 3), Hilt, Navigation,
-tema claro/escuro (Material You), telas placeholder navegáveis e CI no GitHub
-Actions. Ainda **não** conecta ao Wallabag — isso começa na Fase 1.
+tema claro/escuro (Material You), telas placeholder navegáveis e CI no GitHub Actions.
+
+**Fase 1 — Autenticação OAuth2 + rede** ✅
+Login funcional contra uma instância Wallabag (self-hosted ou wallabag.it):
+- Fluxo OAuth2 *password grant* (`/oauth/v2/token`) + **refresh automático** em 401
+  via OkHttp `Authenticator`.
+- Base URL **dinâmica** (interceptor) — suporta instalações em subpath.
+- Tokens em **`EncryptedSharedPreferences`**; estado de sessão reativo (`StateFlow`)
+  dirige a navegação (login ⇄ app).
+- Tela de login (URL, client id/secret, usuário, senha) com validação e mensagens
+  de erro; tela pós-login com logout.
 
 ## Stack
 
-Kotlin · Jetpack Compose · Material 3 · Hilt · Navigation Compose · DataStore ·
-Coroutines/Flow. (Retrofit/OkHttp, Room e WorkManager entram nas fases seguintes.)
+Kotlin · Jetpack Compose · Material 3 · Hilt · Navigation Compose ·
+**Retrofit + OkHttp + kotlinx.serialization** · **security-crypto** · DataStore ·
+Coroutines/Flow. (Room e WorkManager entram nas fases seguintes.)
 
 ## Requisitos
 
@@ -55,5 +65,5 @@ app/src/main/java/com/readbridge/app/
 
 ## Roadmap
 
-Ver [`docs/PLAN.md`](docs/PLAN.md) §7. Próxima fase: **Fase 1 — Auth OAuth2 +
-camada de rede do Wallabag**.
+Ver [`docs/PLAN.md`](docs/PLAN.md) §7. Próxima fase: **Fase 2 — Lista de artigos +
+cache offline (Room + Paging 3, sync incremental)**.
