@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.readbridge.app.data.local.db.EntryDao
 import com.readbridge.app.data.local.db.ReadBridgeDatabase
 import com.readbridge.app.data.local.db.ReadingProgressDao
+import com.readbridge.app.data.sync.PendingActionDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,4 +30,8 @@ object DatabaseModule {
     @Provides
     fun provideReadingProgressDao(database: ReadBridgeDatabase): ReadingProgressDao =
         database.readingProgressDao()
+
+    @Provides
+    fun providePendingActionDao(database: ReadBridgeDatabase): PendingActionDao =
+        database.pendingActionDao()
 }

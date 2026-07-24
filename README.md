@@ -42,15 +42,23 @@ Login funcional contra uma instância Wallabag (self-hosted ou wallabag.it):
 - Preferências persistidas **globalmente** em **DataStore** (`ReadingPreferences`).
 - **Progresso de leitura** por artigo (Room, tabela separada p/ sobreviver ao sync);
   restaura a posição ao reabrir.
-- Favoritar/arquivar com **update otimista** (reverte se o servidor recusar),
-  abrir original e compartilhar.
+- Favoritar/arquivar com **update otimista**, abrir original e compartilhar.
+
+**Fase 4 — Escrita / sync robusto** ✅
+- **Outbox offline**: favoritar/arquivar/adicionar-URL gravam local + enfileiram
+  numa tabela Room (`pending_actions`) que **sobrevive a reinícios**.
+- **WorkManager** (com Hilt): `SyncWorker` drena o outbox e faz o pull incremental;
+  roda **imediatamente** após uma ação e **periodicamente** (a cada 6h).
+- Falha transitória (rede/5xx) → `retry()` com backoff; permanente (4xx) → descarta
+  a ação envenenada.
+- **Adicionar artigo** por URL (FAB + diálogo) e **Share Target**: compartilhar um
+  link de qualquer app salva no Wallabag (`ShareReceiverActivity`).
 
 ## Stack
 
 Kotlin · Jetpack Compose · Material 3 · Hilt · Navigation Compose ·
 **Retrofit + OkHttp + kotlinx.serialization** · **security-crypto** ·
-**Room + Paging 3** · **Coil** · DataStore · Coroutines/Flow.
-(WorkManager entra nas fases seguintes.)
+**Room + Paging 3** · **Coil** · **WorkManager** · DataStore · Coroutines/Flow.
 
 ## Requisitos
 
@@ -87,6 +95,5 @@ app/src/main/java/com/readbridge/app/
 
 ## Roadmap
 
-Ver [`docs/PLAN.md`](docs/PLAN.md) §7. Próxima fase: **Fase 4 — Escrita/sync robusto**
-(adicionar URL + Share Target, `SyncWorker` periódico com WorkManager, outbox de ações
-offline e reconciliação de conflitos).
+Ver [`docs/PLAN.md`](docs/PLAN.md) §7. Próxima fase: **Fase 5 — Extras** (TTS,
+anotações/highlights, export epub/pdf, empacotar fontes p/ o leitor, widget, atalhos).

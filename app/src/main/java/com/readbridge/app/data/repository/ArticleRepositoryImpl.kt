@@ -9,10 +9,12 @@ import com.readbridge.app.data.local.sync.SyncStateStore
 import com.readbridge.app.data.mapper.toArticle
 import com.readbridge.app.data.mapper.toEntity
 import com.readbridge.app.data.remote.api.WallabagApi
+import com.readbridge.app.data.sync.OutboxManager
 import com.readbridge.app.domain.article.ArticleRepository
 import com.readbridge.app.domain.article.model.Article
 import com.readbridge.app.domain.article.model.ArticleFilter
 import com.readbridge.app.domain.article.model.SyncResult
+import com.readbridge.app.domain.sync.SyncScheduler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
@@ -25,6 +27,8 @@ class ArticleRepositoryImpl @Inject constructor(
     private val api: WallabagApi,
     private val dao: EntryDao,
     private val syncStore: SyncStateStore,
+    private val outboxManager: OutboxManager,
+    private val syncScheduler: SyncScheduler,
 ) : ArticleRepository {
 
     override fun pagingData(filter: ArticleFilter): Flow<PagingData<Article>> =
@@ -77,6 +81,11 @@ class ArticleRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             SyncResult.Error(e.message ?: "Falha ao sincronizar.")
         }
+    }
+
+    override suspend fun addUrl(url: String) {
+        outboxManager.enqueueAddUrl(url)
+        syncScheduler.requestSync()
     }
 
     private companion object {

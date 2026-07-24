@@ -52,17 +52,15 @@ class ReaderViewModel @Inject constructor(
 
     fun toggleStar() {
         val current = article.value ?: return
-        viewModelScope.launch {
-            val ok = readerRepository.setStarred(entryId, !current.isStarred)
-            if (!ok) _message.value = "Não foi possível atualizar o favorito (sem conexão)."
-        }
+        viewModelScope.launch { readerRepository.setStarred(entryId, !current.isStarred) }
     }
 
     fun toggleArchive() {
         val current = article.value ?: return
         viewModelScope.launch {
-            val ok = readerRepository.setArchived(entryId, !current.isArchived)
-            if (!ok) _message.value = "Não foi possível arquivar (sem conexão)."
+            val archiving = !current.isArchived
+            readerRepository.setArchived(entryId, archiving)
+            _message.value = if (archiving) "Arquivado" else "Desarquivado"
         }
     }
 

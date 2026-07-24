@@ -9,11 +9,11 @@ interface ReaderRepository {
     /** Observe a single cached article (reflects optimistic star/archive changes live). */
     fun observeArticle(id: Long): Flow<ReaderArticle?>
 
-    /** Toggle starred with an optimistic local update; returns true if the server accepted it. */
-    suspend fun setStarred(id: Long, starred: Boolean): Boolean
+    /** Set starred: optimistic local update + queued for sync (survives offline). */
+    suspend fun setStarred(id: Long, starred: Boolean)
 
-    /** Toggle archived with an optimistic local update; returns true if the server accepted it. */
-    suspend fun setArchived(id: Long, archived: Boolean): Boolean
+    /** Set archived: optimistic local update + queued for sync (survives offline). */
+    suspend fun setArchived(id: Long, archived: Boolean)
 
     /** Last saved scroll ratio (0f..1f) for [id], or 0 if none. */
     suspend fun getProgress(id: Long): Float

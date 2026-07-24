@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import com.readbridge.app.domain.article.model.Article
 import com.readbridge.app.domain.article.model.ArticleFilter
 import com.readbridge.app.domain.article.model.SyncResult
+import com.readbridge.app.domain.article.usecase.AddArticleUseCase
 import com.readbridge.app.domain.article.usecase.ObserveArticlesUseCase
 import com.readbridge.app.domain.article.usecase.SyncArticlesUseCase
 import com.readbridge.app.domain.auth.usecase.LogoutUseCase
@@ -25,6 +26,7 @@ import javax.inject.Inject
 class ArticleListViewModel @Inject constructor(
     observeArticles: ObserveArticlesUseCase,
     private val syncArticles: SyncArticlesUseCase,
+    private val addArticle: AddArticleUseCase,
     private val logout: LogoutUseCase,
 ) : ViewModel() {
 
@@ -57,6 +59,15 @@ class ArticleListViewModel @Inject constructor(
                 is SyncResult.Success -> Unit
             }
             _isRefreshing.value = false
+        }
+    }
+
+    fun addUrl(url: String) {
+        val trimmed = url.trim()
+        if (trimmed.isEmpty()) return
+        viewModelScope.launch {
+            addArticle(trimmed)
+            _message.value = "Artigo adicionado — sincronizando…"
         }
     }
 

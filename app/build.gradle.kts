@@ -100,6 +100,11 @@ dependencies {
     implementation(libs.androidx.paging.compose)
     implementation(libs.coil.compose)
 
+    // Background sync + offline action outbox (Phase 4)
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
+
     // DataStore (sync cursor + reading preferences persistence — see §6-A.4)
     implementation(libs.androidx.datastore.preferences)
 

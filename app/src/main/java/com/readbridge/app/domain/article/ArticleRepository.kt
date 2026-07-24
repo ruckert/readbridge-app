@@ -19,4 +19,7 @@ interface ArticleRepository {
      * @param fullRefresh ignore the incremental cursor and re-fetch everything.
      */
     suspend fun sync(fullRefresh: Boolean = false): SyncResult
+
+    /** Queue a new article (by URL) to be saved on the server; synced in the background. */
+    suspend fun addUrl(url: String)
 }
