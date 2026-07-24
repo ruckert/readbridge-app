@@ -1,8 +1,13 @@
 package com.readbridge.app.data.remote.api
 
 import com.readbridge.app.data.remote.dto.EntriesResponseDto
+import com.readbridge.app.data.remote.dto.EntryDto
 import com.readbridge.app.data.remote.dto.WallabagInfoDto
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -33,4 +38,13 @@ interface WallabagApi {
         @Query("since") since: Long? = null,
         @Query("detail") detail: String = "full",
     ): EntriesResponseDto
+
+    /** Update an entry's flags. [archive]/[starred] are 0/1; pass null to leave unchanged. */
+    @FormUrlEncoded
+    @PATCH("api/entries/{id}.json")
+    suspend fun updateEntry(
+        @Path("id") id: Long,
+        @Field("archive") archive: Int? = null,
+        @Field("starred") starred: Int? = null,
+    ): EntryDto
 }

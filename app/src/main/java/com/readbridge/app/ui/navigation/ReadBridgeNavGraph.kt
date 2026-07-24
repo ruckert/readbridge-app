@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.readbridge.app.ui.articles.ArticleListScreen
 import com.readbridge.app.ui.auth.LoginScreen
+import com.readbridge.app.ui.reader.ReaderScreen
 import com.readbridge.app.ui.screens.PlaceholderScreen
 
 /**
@@ -40,14 +41,8 @@ fun ReadBridgeNavGraph(
         composable(
             route = Destinations.READER,
             arguments = listOf(navArgument("entryId") { type = NavType.LongType }),
-        ) { backStackEntry ->
-            val entryId = backStackEntry.arguments?.getLong("entryId") ?: -1L
-            PlaceholderScreen(
-                title = "Leitor",
-                subtitle = "Artigo #$entryId — leitor real na Fase 3.",
-                actionLabel = "Voltar",
-                onAction = { navController.popBackStack() },
-            )
+        ) {
+            ReaderScreen(onBack = { navController.popBackStack() })
         }
         composable(Destinations.SETTINGS) {
             PlaceholderScreen(

@@ -4,6 +4,7 @@ import com.readbridge.app.data.local.db.EntryEntity
 import com.readbridge.app.data.remote.dto.EntryDto
 import com.readbridge.app.data.util.DateParsing
 import com.readbridge.app.domain.article.model.Article
+import com.readbridge.app.domain.reader.model.ReaderArticle
 
 fun EntryDto.toEntity(): EntryEntity = EntryEntity(
     id = id,
@@ -30,4 +31,14 @@ fun EntryEntity.toArticle(): Article = Article(
     isStarred = isStarred,
     isArchived = isArchived,
     tags = tags,
+)
+
+fun EntryEntity.toReaderArticle(): ReaderArticle = ReaderArticle(
+    id = id,
+    title = title,
+    url = url,
+    domainName = domainName,
+    contentHtml = content.orEmpty(),
+    isStarred = isStarred,
+    isArchived = isArchived,
 )

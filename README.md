@@ -31,7 +31,19 @@ Login funcional contra uma instância Wallabag (self-hosted ou wallabag.it):
 - **Paging 3** sobre o Room; **pull-to-refresh** (Material 3).
 - Filtros **Todos / Não lidos / Favoritos / Arquivados**.
 - Card com imagem (**Coil**), título, domínio, tempo de leitura e indicador de favorito.
-- HTML do artigo é cacheado para o leitor offline (Fase 3); logout no menu.
+- HTML do artigo é cacheado para o leitor offline; logout no menu.
+
+**Fase 3 — Leitor** ✅ (ver PLAN §6-A)
+- **WebView** com template HTML + **CSS variables**; mudar uma preferência só muta as
+  variáveis (via `evaluateJavascript`) — **ao vivo, sem recarregar nem perder a posição**.
+- Painel **"Aa"**: fonte (5 famílias incl. dislexia), tamanho, peso, entrelinha,
+  espaço entre letras, largura da coluna, alinhamento, hifenização.
+- **Temas de leitura**: Claro / Sépia / Cinza / OLED / Sistema (com chrome combinando).
+- Preferências persistidas **globalmente** em **DataStore** (`ReadingPreferences`).
+- **Progresso de leitura** por artigo (Room, tabela separada p/ sobreviver ao sync);
+  restaura a posição ao reabrir.
+- Favoritar/arquivar com **update otimista** (reverte se o servidor recusar),
+  abrir original e compartilhar.
 
 ## Stack
 
@@ -75,5 +87,6 @@ app/src/main/java/com/readbridge/app/
 
 ## Roadmap
 
-Ver [`docs/PLAN.md`](docs/PLAN.md) §7. Próxima fase: **Fase 3 — Leitor** (WebView com
-template HTML + CSS variables, temas de leitura e `ReadingPreferences` — ver §6-A).
+Ver [`docs/PLAN.md`](docs/PLAN.md) §7. Próxima fase: **Fase 4 — Escrita/sync robusto**
+(adicionar URL + Share Target, `SyncWorker` periódico com WorkManager, outbox de ações
+offline e reconciliação de conflitos).
